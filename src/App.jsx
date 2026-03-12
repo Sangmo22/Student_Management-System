@@ -1,8 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
+const STUDENTS_STORAGE_KEY = "student-manager-records";
+
 function App() {
-  const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState(() => {
+    try {
+      const savedStudents = localStorage.getItem(STUDENTS_STORAGE_KEY);
+      return savedStudents ? JSON.parse(savedStudents) : [];
+    } catch {
+      return [];
+    }
+  });
   const [error, setError] = useState("");
   const [editingStudentId, setEditingStudentId] = useState(null);
 
@@ -128,6 +137,10 @@ function App() {
       course: "",
     });
   };
+
+  useEffect(() => {
+    localStorage.setItem(STUDENTS_STORAGE_KEY, JSON.stringify(students));
+  }, [students]);
 
   return (
     <main className="student-manager">
