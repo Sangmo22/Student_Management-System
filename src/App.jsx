@@ -3,6 +3,7 @@ import "./App.css";
 
 function App() {
   const [students, setStudents] = useState([]);
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -13,6 +14,23 @@ function App() {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    setError("");
+
+    if (name === "age") {
+      if (value === "") {
+        setFormData((prevData) => ({
+          ...prevData,
+          age: "",
+        }));
+        return;
+      }
+
+      // Accept only positive whole numbers for age.
+      if (!/^\d+$/.test(value) || Number(value) < 1) {
+        return;
+      }
+    }
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -22,12 +40,35 @@ function App() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    const trimmedData = {
+      fullName: formData.fullName.trim(),
+      email: formData.email.trim(),
+      age: formData.age.trim(),
+      course: formData.course.trim(),
+    };
+
+    if (
+      !trimmedData.fullName ||
+      !trimmedData.email ||
+      !trimmedData.age ||
+      !trimmedData.course
+    ) {
+      setError("Please fill all fields before adding a student.");
+      return;
+    }
+
+    if (Number(trimmedData.age) <= 0) {
+      setError("Age must be greater than 0.");
+      return;
+    }
+
     const newStudent = {
       id: Date.now(),
-      ...formData,
+      ...trimmedData,
     };
 
     setStudents((prevStudents) => [newStudent, ...prevStudents]);
+    setError("");
 
     setFormData({
       fullName: "",
@@ -70,6 +111,8 @@ function App() {
                 id="age"
                 name="age"
                 type="number"
+                min="1"
+                step="1"
                 placeholder="Enter age"
                 value={formData.age}
                 onChange={handleInputChange}
@@ -90,6 +133,7 @@ function App() {
           </div>
 
           <button type="submit">Add Student</button>
+          {error && <p>{error}</p>}
         </form>
       </section>
 
