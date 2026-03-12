@@ -2,6 +2,8 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
+  const [students, setStudents] = useState([]);
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -17,15 +19,30 @@ function App() {
     }));
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const newStudent = {
+      id: Date.now(),
+      ...formData,
+    };
+
+    setStudents((prevStudents) => [newStudent, ...prevStudents]);
+
+    setFormData({
+      fullName: "",
+      email: "",
+      age: "",
+      course: "",
+    });
+  };
+
   return (
     <main className="student-manager">
       <section className="student-form-section">
         <h1>Student Manager</h1>
 
-        <form
-          className="student-form"
-          onSubmit={(event) => event.preventDefault()}
-        >
+        <form className="student-form" onSubmit={handleSubmit}>
           <label htmlFor="fullName">Full Name</label>
           <input
             id="fullName"
@@ -79,7 +96,7 @@ function App() {
       <section className="student-records-section">
         <div className="records-header">
           <h2>Student Records</h2>
-          <span>0 students</span>
+          <span>{students.length} students</span>
         </div>
 
         <p>No student records yet.</p>
