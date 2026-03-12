@@ -1,0 +1,114 @@
+.student-manager {
+  width: min(980px, 100%);
+  margin: 2rem auto;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.student-form-section,
+.student-records-section {
+  background: #ffffff;
+  border: 1px solid #d8e2e6;
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: 0 12px 28px -24px rgba(16, 39, 48, 0.55);
+}
+
+.student-form-section h1,
+.records-header h2 {
+  margin: 0;
+  color: #0f2234;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+}
+
+.student-form-section h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.student-form {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.student-form label {
+  color: #102638;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.student-form input {
+  width: 100%;
+  border: 1px solid #bbcad0;
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+  font-size: 1rem;
+  color: #2e4c5f;
+  background: #fbfcfc;
+}
+
+.student-form input:focus {
+  outline: none;
+  border-color: #2c8a83;
+  box-shadow: 0 0 0 3px rgba(44, 138, 131, 0.15);
+}
+
+.row-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.field-group {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.student-form button {
+  border: 0;
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f3ffff;
+  background: #2f867f;
+  cursor: pointer;
+}
+
+.student-form button:hover {
+  background: #276f69;
+}
+
+.records-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.records-header span {
+  color: #5a7181;
+  font-size: 0.95rem;
+}
+
+.student-records-section p {
+  margin: 0;
+  color: #5a7181;
+}
+
+@media (max-width: 768px) {
+  .student-manager {
+    margin: 1.2rem auto;
+  }
+
+  .row-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .records-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
