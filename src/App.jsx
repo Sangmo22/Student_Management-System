@@ -48,7 +48,12 @@ function App() {
       course: formData.course.trim(),
     };
 
-    if (!trimmedData.fullName || !trimmedData.email || !trimmedData.rollNo || !trimmedData.course) {
+    if (
+      !trimmedData.fullName ||
+      !trimmedData.email ||
+      !trimmedData.rollNo ||
+      !trimmedData.course
+    ) {
       setError("Please fill all fields before adding a student.");
       return;
     }
@@ -59,7 +64,9 @@ function App() {
     }
 
     const isDuplicateRollNo = students.some(
-      (student) => student.rollNo === trimmedData.rollNo && student.id !== editingStudentId,
+      (student) =>
+        student.rollNo === trimmedData.rollNo &&
+        student.id !== editingStudentId,
     );
 
     if (isDuplicateRollNo) {
@@ -70,7 +77,9 @@ function App() {
     if (editingStudentId !== null) {
       setStudents((prevStudents) =>
         prevStudents.map((student) =>
-          student.id === editingStudentId ? { ...student, ...trimmedData } : student,
+          student.id === editingStudentId
+            ? { ...student, ...trimmedData }
+            : student,
         ),
       );
       setEditingStudentId(null);
@@ -84,7 +93,9 @@ function App() {
   };
 
   const handleDeleteStudent = (studentId) => {
-    setStudents((prevStudents) => prevStudents.filter((student) => student.id !== studentId));
+    setStudents((prevStudents) =>
+      prevStudents.filter((student) => student.id !== studentId),
+    );
     if (studentId === editingStudentId) {
       setEditingStudentId(null);
       setFormData({ fullName: "", email: "", rollNo: "", course: "" });
@@ -113,15 +124,22 @@ function App() {
   }, [students]);
 
   const normalizedSearchTerm = searchTerm.trim().toLowerCase();
-  const filteredStudents = students.filter((student) => {
-    if (!normalizedSearchTerm) return true;
-    return (
-      student.fullName.toLowerCase().includes(normalizedSearchTerm) ||
-      student.email.toLowerCase().includes(normalizedSearchTerm) ||
-      student.rollNo.toLowerCase().includes(normalizedSearchTerm) ||
-      student.course.toLowerCase().includes(normalizedSearchTerm)
-    );
-  });
+  const filteredStudents = students
+    .filter((student) => {
+      if (!normalizedSearchTerm) return true;
+      return (
+        student.fullName.toLowerCase().includes(normalizedSearchTerm) ||
+        student.email.toLowerCase().includes(normalizedSearchTerm) ||
+        student.rollNo.toLowerCase().includes(normalizedSearchTerm) ||
+        student.course.toLowerCase().includes(normalizedSearchTerm)
+      );
+    })
+    .sort((a, b) => {
+      const aNum = parseFloat(a.rollNo);
+      const bNum = parseFloat(b.rollNo);
+      if (!isNaN(aNum) && !isNaN(bNum)) return aNum - bNum;
+      return a.rollNo.localeCompare(b.rollNo);
+    });
 
   return (
     <main className="student-manager">
@@ -130,19 +148,49 @@ function App() {
 
         <form className="student-form" onSubmit={handleSubmit}>
           <label htmlFor="fullName">Full Name</label>
-          <input id="fullName" name="fullName" type="text" placeholder="Enter full name" value={formData.fullName} onChange={handleInputChange} />
+          <input
+            id="fullName"
+            name="fullName"
+            type="text"
+            placeholder="Enter full name"
+            value={formData.fullName}
+            onChange={handleInputChange}
+          />
 
           <label htmlFor="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="Enter email" value={formData.email} onChange={handleInputChange} />
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Enter email"
+            value={formData.email}
+            onChange={handleInputChange}
+          />
 
           <div className="row-fields">
             <div className="field-group">
               <label htmlFor="rollNo">Roll No</label>
-              <input id="rollNo" name="rollNo" type="number" min="1" step="1" placeholder="Enter roll number" value={formData.rollNo} onChange={handleInputChange} />
+              <input
+                id="rollNo"
+                name="rollNo"
+                type="number"
+                min="1"
+                step="1"
+                placeholder="Enter roll number"
+                value={formData.rollNo}
+                onChange={handleInputChange}
+              />
             </div>
             <div className="field-group">
               <label htmlFor="course">Course</label>
-              <input id="course" name="course" type="text" placeholder="Enter course" value={formData.course} onChange={handleInputChange} />
+              <input
+                id="course"
+                name="course"
+                type="text"
+                placeholder="Enter course"
+                value={formData.course}
+                onChange={handleInputChange}
+              />
             </div>
           </div>
 
@@ -151,7 +199,11 @@ function App() {
               {editingStudentId !== null ? "Update Student" : "Add Student"}
             </button>
             {editingStudentId !== null && (
-              <button type="button" className="cancel-edit-btn" onClick={handleCancelEdit}>
+              <button
+                type="button"
+                className="cancel-edit-btn"
+                onClick={handleCancelEdit}
+              >
                 Cancel Edit
               </button>
             )}
@@ -199,8 +251,20 @@ function App() {
                     <td>{student.course}</td>
                     <td>
                       <div className="action-buttons">
-                        <button type="button" className="edit-btn" onClick={() => handleEditStudent(student)}>Edit</button>
-                        <button type="button" className="delete-btn" onClick={() => handleDeleteStudent(student.id)}>Delete</button>
+                        <button
+                          type="button"
+                          className="edit-btn"
+                          onClick={() => handleEditStudent(student)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="delete-btn"
+                          onClick={() => handleDeleteStudent(student.id)}
+                        >
+                          Delete
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -214,7 +278,4 @@ function App() {
   );
 }
 
-
-
-
-export default App
+export default App;
