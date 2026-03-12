@@ -4,6 +4,7 @@ import "./App.css";
 function App() {
   const [students, setStudents] = useState([]);
   const [error, setError] = useState("");
+  const [editingStudentId, setEditingStudentId] = useState(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -62,12 +63,24 @@ function App() {
       return;
     }
 
-    const newStudent = {
-      id: Date.now(),
-      ...trimmedData,
-    };
+    if (editingStudentId !== null) {
+      setStudents((prevStudents) =>
+        prevStudents.map((student) =>
+          student.id === editingStudentId
+            ? { ...student, ...trimmedData }
+            : student,
+        ),
+      );
+      setEditingStudentId(null);
+    } else {
+      const newStudent = {
+        id: Date.now(),
+        ...trimmedData,
+      };
 
-    setStudents((prevStudents) => [newStudent, ...prevStudents]);
+      setStudents((prevStudents) => [newStudent, ...prevStudents]);
+    }
+
     setError("");
 
     setFormData({
@@ -75,6 +88,33 @@ function App() {
       email: "",
       age: "",
       course: "",
+    });
+  };
+
+  const handleDeleteStudent = (studentId) => {
+    setStudents((prevStudents) =>
+      prevStudents.filter((student) => student.id !== studentId),
+    );
+
+    if (studentId === editingStudentId) {
+      setEditingStudentId(null);
+      setFormData({
+        fullName: "",
+        email: "",
+        age: "",
+        course: "",
+      });
+    }
+  };
+
+  const handleEditStudent = (student) => {
+    setError("");
+    setEditingStudentId(student.id);
+    setFormData({
+      fullName: student.fullName,
+      email: student.email,
+      age: student.age,
+      course: student.course,
     });
   };
 
@@ -132,7 +172,9 @@ function App() {
             </div>
           </div>
 
-          <button type="submit">Add Student</button>
+          <button type="submit">
+            {editingStudentId !== null ? "Update Student" : "Add Student"}
+          </button>
           {error && <p>{error}</p>}
         </form>
       </section>
@@ -146,15 +188,46 @@ function App() {
         {students.length === 0 ? (
           <p>No student records yet.</p>
         ) : (
-          <div className="student-list">
-            {students.map((student) => (
-              <article key={student.id} className="student-card">
-                <h3>{student.fullName}</h3>
-                <p>{student.email}</p>
-                <p>Age: {student.age}</p>
-                <p>Course: {student.course}</p>
-              </article>
-            ))}
+          <div className="table-wrap">
+            <table className="student-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Age</th>
+                  <th>Course</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {students.map((student) => (
+                  <tr key={student.id}>
+                    <td>{student.fullName}</td>
+                    <td>{student.email}</td>
+                    <td>{student.age}</td>
+                    <td>{student.course}</td>
+                    <td>
+                      <div className="action-buttons">
+                        <button
+                          type="button"
+                          className="edit-btn"
+                          onClick={() => handleEditStudent(student)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="delete-btn"
+                          onClick={() => handleDeleteStudent(student.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </section>
