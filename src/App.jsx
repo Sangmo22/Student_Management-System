@@ -1,6 +1,22 @@
+import { useState } from "react";
 import "./App.css";
 
 function App() {
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    age: "",
+    course: "",
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   return (
     <main className="student-manager">
       <section className="student-form-section">
@@ -16,6 +32,8 @@ function App() {
             name="fullName"
             type="text"
             placeholder="Enter full name"
+            value={formData.fullName}
+            onChange={handleInputChange}
           />
 
           <label htmlFor="email">Email</label>
@@ -24,6 +42,8 @@ function App() {
             name="email"
             type="email"
             placeholder="Enter email"
+            value={formData.email}
+            onChange={handleInputChange}
           />
 
           <div className="row-fields">
@@ -34,6 +54,8 @@ function App() {
                 name="age"
                 type="number"
                 placeholder="Enter age"
+                value={formData.age}
+                onChange={handleInputChange}
               />
             </div>
 
@@ -44,6 +66,8 @@ function App() {
                 name="course"
                 type="text"
                 placeholder="Enter course"
+                value={formData.course}
+                onChange={handleInputChange}
               />
             </div>
           </div>
