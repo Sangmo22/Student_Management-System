@@ -115,6 +115,23 @@
   color: #5a7181;
 }
 
+.search-input {
+  width: 100%;
+  border: 1px solid #bbcad0;
+  border-radius: 10px;
+  padding: 0.72rem 0.85rem;
+  font-size: 0.95rem;
+  color: #2e4c5f;
+  background: #fbfcfc;
+  margin-bottom: 0.8rem;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #2c8a83;
+  box-shadow: 0 0 0 3px rgba(44, 138, 131, 0.15);
+}
+
 .table-wrap {
   width: 100%;
   overflow-x: auto;

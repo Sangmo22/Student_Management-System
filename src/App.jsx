@@ -14,6 +14,7 @@ function App() {
   });
   const [error, setError] = useState("");
   const [editingStudentId, setEditingStudentId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -69,6 +70,17 @@ function App() {
 
     if (Number(trimmedData.rollNo) <= 0) {
       setError("Roll No must be greater than 0.");
+      return;
+    }
+
+    const isDuplicateRollNo = students.some(
+      (student) =>
+        student.rollNo === trimmedData.rollNo &&
+        student.id !== editingStudentId,
+    );
+
+    if (isDuplicateRollNo) {
+      setError("This Roll No is already assigned to another student.");
       return;
     }
 
@@ -141,6 +153,21 @@ function App() {
   useEffect(() => {
     localStorage.setItem(STUDENTS_STORAGE_KEY, JSON.stringify(students));
   }, [students]);
+
+  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+
+  const filteredStudents = students.filter((student) => {
+    if (!normalizedSearchTerm) {
+      return true;
+    }
+
+    return (
+      student.fullName.toLowerCase().includes(normalizedSearchTerm) ||
+      student.email.toLowerCase().includes(normalizedSearchTerm) ||
+      student.rollNo.toLowerCase().includes(normalizedSearchTerm) ||
+      student.course.toLowerCase().includes(normalizedSearchTerm)
+    );
+  });
 
   return (
     <main className="student-manager">
@@ -220,8 +247,18 @@ function App() {
           <span>{students.length} students</span>
         </div>
 
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search by name, email, roll no, or course"
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+        />
+
         {students.length === 0 ? (
           <p>No student records yet.</p>
+        ) : filteredStudents.length === 0 ? (
+          <p>No matching students found.</p>
         ) : (
           <div className="table-wrap">
             <table className="student-table">
@@ -235,7 +272,7 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {students.map((student) => (
+                {filteredStudents.map((student) => (
                   <tr key={student.id}>
                     <td>{student.fullName}</td>
                     <td>{student.email}</td>
