@@ -9,7 +9,7 @@ function App() {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
-    age: "",
+    rollNo: "",
     course: "",
   });
 
@@ -17,16 +17,16 @@ function App() {
     const { name, value } = event.target;
     setError("");
 
-    if (name === "age") {
+    if (name === "rollNo") {
       if (value === "") {
         setFormData((prevData) => ({
           ...prevData,
-          age: "",
+          rollNo: "",
         }));
         return;
       }
 
-      // Accept only positive whole numbers for age.
+      // Accept only positive whole numbers for roll number.
       if (!/^\d+$/.test(value) || Number(value) < 1) {
         return;
       }
@@ -44,22 +44,22 @@ function App() {
     const trimmedData = {
       fullName: formData.fullName.trim(),
       email: formData.email.trim(),
-      age: formData.age.trim(),
+      rollNo: formData.rollNo.trim(),
       course: formData.course.trim(),
     };
 
     if (
       !trimmedData.fullName ||
       !trimmedData.email ||
-      !trimmedData.age ||
+      !trimmedData.rollNo ||
       !trimmedData.course
     ) {
       setError("Please fill all fields before adding a student.");
       return;
     }
 
-    if (Number(trimmedData.age) <= 0) {
-      setError("Age must be greater than 0.");
+    if (Number(trimmedData.rollNo) <= 0) {
+      setError("Roll No must be greater than 0.");
       return;
     }
 
@@ -86,7 +86,7 @@ function App() {
     setFormData({
       fullName: "",
       email: "",
-      age: "",
+      rollNo: "",
       course: "",
     });
   };
@@ -101,7 +101,7 @@ function App() {
       setFormData({
         fullName: "",
         email: "",
-        age: "",
+        rollNo: "",
         course: "",
       });
     }
@@ -113,7 +113,7 @@ function App() {
     setFormData({
       fullName: student.fullName,
       email: student.email,
-      age: student.age,
+      rollNo: student.rollNo,
       course: student.course,
     });
   };
@@ -124,7 +124,7 @@ function App() {
     setFormData({
       fullName: "",
       email: "",
-      age: "",
+      rollNo: "",
       course: "",
     });
   };
@@ -157,15 +157,15 @@ function App() {
 
           <div className="row-fields">
             <div className="field-group">
-              <label htmlFor="age">Age</label>
+              <label htmlFor="rollNo">Roll No</label>
               <input
-                id="age"
-                name="age"
+                id="rollNo"
+                name="rollNo"
                 type="number"
                 min="1"
                 step="1"
-                placeholder="Enter age"
-                value={formData.age}
+                placeholder="Enter roll number"
+                value={formData.rollNo}
                 onChange={handleInputChange}
               />
             </div>
@@ -216,7 +216,7 @@ function App() {
                 <tr>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>Age</th>
+                  <th>Roll No</th>
                   <th>Course</th>
                   <th>Action</th>
                 </tr>
@@ -226,7 +226,7 @@ function App() {
                   <tr key={student.id}>
                     <td>{student.fullName}</td>
                     <td>{student.email}</td>
-                    <td>{student.age}</td>
+                    <td>{student.rollNo}</td>
                     <td>{student.course}</td>
                     <td>
                       <div className="action-buttons">
