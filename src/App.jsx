@@ -99,7 +99,20 @@ function App() {
           <span>{students.length} students</span>
         </div>
 
-        <p>No student records yet.</p>
+        {students.length === 0 ? (
+          <p>No student records yet.</p>
+        ) : (
+          <div className="student-list">
+            {students.map((student) => (
+              <article key={student.id} className="student-card">
+                <h3>{student.fullName}</h3>
+                <p>{student.email}</p>
+                <p>Age: {student.age}</p>
+                <p>Course: {student.course}</p>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );
