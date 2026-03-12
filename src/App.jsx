@@ -118,6 +118,17 @@ function App() {
     });
   };
 
+  const handleCancelEdit = () => {
+    setError("");
+    setEditingStudentId(null);
+    setFormData({
+      fullName: "",
+      email: "",
+      age: "",
+      course: "",
+    });
+  };
+
   return (
     <main className="student-manager">
       <section className="student-form-section">
@@ -172,9 +183,20 @@ function App() {
             </div>
           </div>
 
-          <button type="submit">
-            {editingStudentId !== null ? "Update Student" : "Add Student"}
-          </button>
+          <div className="form-actions">
+            <button type="submit">
+              {editingStudentId !== null ? "Update Student" : "Add Student"}
+            </button>
+            {editingStudentId !== null && (
+              <button
+                type="button"
+                className="cancel-edit-btn"
+                onClick={handleCancelEdit}
+              >
+                Cancel Edit
+              </button>
+            )}
+          </div>
           {error && <p>{error}</p>}
         </form>
       </section>
